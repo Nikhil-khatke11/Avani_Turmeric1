@@ -29,7 +29,7 @@ public class Main {
 
             Tomcat tomcat = new Tomcat();
             tomcat.setPort(port);
-            tomcat.getConnector();
+            tomcat.getConnector().setProperty("address", "0.0.0.0");
 
             // Create context
             String docBase = new File(".").getAbsolutePath();
