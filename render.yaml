@@ -1,0 +1,36 @@
+# Render.com Deployment Configuration for Avani Turmeric Backend
+
+services:
+  - type: web
+    name: avani-backend
+    runtime: java
+    buildCommand: chmod +x mvnw && ./mvnw clean package -DskipTests
+    startCommand: java -jar target/avani-turmeric-1.0.0.jar
+    envVars:
+      - key: DB_TYPE
+        value: postgres
+      - key: DATABASE_URL
+        fromDatabase:
+          name: avani-db
+          property: connectionString
+      - key: DB_USER
+        fromDatabase:
+          name: avani-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: avani-db
+          property: password
+      - key: FRONTEND_URL
+        value: https://avani-turmerics.netlify.app
+      - key: EMAIL_FROM
+        value: nkhatke2@gmail.com
+      - key: EMAIL_PASSWORD
+        sync: false
+      - key: EMAIL_TO
+        value: khatkenikhil2003@gmail.com
+
+databases:
+  - name: avani-db
+    databaseName: avani_turmeric
+    user: avani_user
