@@ -48,6 +48,14 @@ public class Main {
             Tomcat.addServlet(ctx, "placeOrder", new PlaceOrderServlet());
             ctx.addServletMappingDecoded("/placeOrder", "placeOrder");
 
+            Tomcat.addServlet(ctx, "health", new jakarta.servlet.http.HttpServlet() {
+                protected void doGet(jakarta.servlet.http.HttpServletRequest req, jakarta.servlet.http.HttpServletResponse resp) throws java.io.IOException {
+                    resp.setStatus(200);
+                    resp.getWriter().write("OK");
+                }
+            });
+            ctx.addServletMappingDecoded("/health", "health");
+
             // Register CORS filter using Tomcat's native API
             FilterDef filterDef = new FilterDef();
             filterDef.setFilterName("CorsFilter");
