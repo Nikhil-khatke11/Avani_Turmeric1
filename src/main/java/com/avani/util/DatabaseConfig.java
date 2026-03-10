@@ -22,25 +22,32 @@ public class DatabaseConfig {
     private static final String POSTGRES_USER = System.getenv("DB_USER");
     private static final String POSTGRES_PASSWORD = System.getenv("DB_PASSWORD");
 
+    static {
+        // Explicitly load JDBC drivers
+        try {
+            if ("postgres".equalsIgnoreCase(DB_TYPE)) {
+                Class.forName("org.postgresql.Driver");
+                System.out.println("✅ PostgreSQL JDBC driver loaded");
+            }
+        } catch (ClassNotFoundException e) {
+            System.err.println("❌ JDBC driver not found: " + e.getMessage());
+        }
+    }
+
     /**
      * Get database connection based on environment
-     * 
-     * @return Connection to appropriate database
-     * @throws SQLException if connection fails
      */
     public static Connection getConnection() throws SQLException {
         if ("postgres".equalsIgnoreCase(DB_TYPE)) {
-            // Cloud deployment with PostgreSQL
+            System.out.println("🔗 Connecting to PostgreSQL: " + POSTGRES_URL);
             return DriverManager.getConnection(POSTGRES_URL, POSTGRES_USER, POSTGRES_PASSWORD);
         } else {
-            // Local development with Oracle
             return DriverManager.getConnection(ORACLE_URL, ORACLE_USER, ORACLE_PASSWORD);
         }
     }
 
     /**
      * Get the appropriate SQL for sequence/auto-increment
-     * Oracle uses sequences, PostgreSQL uses SERIAL/NEXTVAL
      */
     public static String getNextValSyntax(String sequenceName) {
         if ("postgres".equalsIgnoreCase(DB_TYPE)) {
