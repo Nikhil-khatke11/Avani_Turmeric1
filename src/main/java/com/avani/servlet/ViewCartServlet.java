@@ -65,7 +65,6 @@ public class ViewCartServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.print("[]");
         }
     }
